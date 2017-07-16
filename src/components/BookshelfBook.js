@@ -17,7 +17,10 @@ function BookshelfBook({ book, handleBookshelfBookChange }) {
                     </div>
                 </div>
                 <div className="book-title">{book.title}</div>
-                <div className="book-authors">{book.authors}</div>
+                <div className="book-authors">{book.authors.join(', ')}</div>
+                <div className="book-categories">
+                    {book.categories ? book.categories.map(category => category.toLowerCase().replace(/\b\w/g, l => l.toUpperCase())).join() : 'None'}
+                </div>
             </div>
         </li>
     )
