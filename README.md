@@ -18,3 +18,6 @@ $ npm start
 ## Authors
 
 * [Irakli Kobalia](https://github.com/kobala/)
+
+## Demo
+Live demo: https://myreads-2fe0c.firebaseapp.com/
