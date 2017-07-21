@@ -1,0 +1,39 @@
+.book-details {
+    margin-left: 60px;
+    margin-top: 60px;
+    width:100%;
+}
+
+.book-details .book-cover {
+    display: inline-block;
+    width: 180px;
+    height: 270px;
+    color: white;
+    background-color: #619963;
+    float: left;
+    border: 2px gray solid;
+    padding: 20px;
+    margin-right: 40px;
+    margin-bottom: 30px;
+}
+
+.book-details p {
+    font-size: 0.9em;
+    line-height: 1.4;
+    width:50%;
+}
+
+.book-details .book-description {
+    margin-left: 30px;
+}
+
+
+.book-details h3 {
+    font-size: 1.3em;
+    font-weight: bold;
+}
+
+.book-details h4 {
+    font-size: 1em;
+    font-style: italic;
+}

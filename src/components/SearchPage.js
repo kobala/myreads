@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import { Link } from 'react-router-dom'
 import * as BooksAPI from '../utils/BooksAPI'
 import Bookshelf from './Bookshelf'
 import ProgressBar from './common/ProgressBar'
@@ -8,7 +7,8 @@ class SearchPage extends Component{
     state = {
         books: [],
         query: '',
-        isLoading: false
+        isLoading: false,
+        prevPage: ''
     }
 
     handleSearchQueryUpdate(query) {
@@ -18,6 +18,7 @@ class SearchPage extends Component{
 
         if (trimmedQuery === ''){
             this.setState({ isLoading: false })
+
             return
         }
 
@@ -31,21 +32,30 @@ class SearchPage extends Component{
 
     handleBookshelfBookChange = (book, shelf) => {
         BooksAPI.update(book, shelf)
-            .then(() => shelf !== 'none' ? alert(`${book.title} has been added to your list!`) : null)
+            .then(() => {
+                let { books } = this.state
+
+                books.find((b) => b === book ).shelf = shelf
+
+                this.setState({ books })
+
+                if(shelf !== 'none')
+                    alert(`${book.title} has been added to your list!`)
+            })
             .catch(() => alert('An error occurred! Please try again!'));
     }
 
     render(){
+        const { books, query, isLoading } = this.state
+        
         return(
             <div className="search-books">
-                { this.state.isLoading && <ProgressBar /> }
+                { isLoading && <ProgressBar /> }
                 <div className="search-books-bar">
-                    <Link
-                        to='/'
-                        className='close-search'
-                    >
+                    <a href="" onClick={this.props.history.goBack} className='close-search'>
                         Close
-                    </Link>
+                    </a>
+
                     <div className="search-books-input-wrapper">
                         <input
                             type="text"
@@ -54,15 +64,16 @@ class SearchPage extends Component{
                         />
                     </div>
                 </div>
+
                 <div className="search-books-results">
                     <ol className="books-grid">
-                        { (this.state.query !== '' && this.state.books.length > 0) ?
+                        { (query !== '' && books.length > 0) ?
                             <Bookshelf
-                            title="Search Results"
-                            debounceTimeout={400}
-                            books={this.state.books}
-                            handleBookshelfBookChange={this.handleBookshelfBookChange}
-                            /> : ( this.state.query !== '' && !this.state.isLoading && this.state.books.length === 0 ) &&
+                                title="Search Results"
+                                debounceTimeout={400}
+                                books={books}
+                                handleBookshelfBookChange={this.handleBookshelfBookChange}
+                            /> : ( query !== '' && !isLoading && books.length === 0 ) &&
                             <div>No Search Result</div>
                         }
                     </ol>

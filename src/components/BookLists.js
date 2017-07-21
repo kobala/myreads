@@ -66,14 +66,12 @@ class BookLists extends Component {
     }
 
     render() {
-        let books = this.state.books
+        let { books, categories, selectedCategories, query } = this.state
 
-        if(this.state.selectedCategories.length > 0)
+        if(selectedCategories.length > 0)
             books = books.filter(book => book.categories && book.categories
                 .map(category => category.toLowerCase().replace(/\b\w/g, l => l.toUpperCase()))
-                .some(category => this.state.selectedCategories.indexOf(category) >= 0))
-
-        const { query } = this.state
+                .some(category => selectedCategories.indexOf(category) >= 0))
 
         if (query) {
             const match = new RegExp(escapeRegExp(query), 'i')
@@ -96,8 +94,8 @@ class BookLists extends Component {
                         <div className="wrap">
                             <div className="filter-bar"><span className="text">Filter: </span>
                                 <Select
-                                    options={this.state.categories}
-                                    value={this.state.selectedCategories}
+                                    options={categories}
+                                    value={selectedCategories}
                                     searchable={true}
                                     multi={true}
                                     className="filter-select"
