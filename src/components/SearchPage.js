@@ -24,7 +24,7 @@ class SearchPage extends Component{
 
         let trimmedQuery = query.trim()
 
-        this.updateQueryString(trimmedQuery)
+        this.updateQueryString(query)
 
         if (trimmedQuery === ''){
             this.setState({ isLoading: false })
@@ -70,6 +70,7 @@ class SearchPage extends Component{
                             type="text"
                             placeholder="Search by title or author"
                             onChange={e => this.handleSearchQueryUpdate(e.target.value)}
+                            value={this.state.query}
                         />
                     </div>
                 </div>
