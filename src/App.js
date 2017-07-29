@@ -41,14 +41,15 @@ class BooksApp extends Component{
                     />
                     <Route exact path="/search"
                            render={({ history }) => (<SearchPage books={this.state.books}
-                                                      handleBookshelfBookChange={this.handleBookshelfBookChange}
-                                                      goBack={history.goBack}
+                                                                 handleBookshelfBookChange={this.handleBookshelfBookChange}
+                                                                 goBack={history.goBack}
                            />)}
                     />
                     <Route path="/book/:id"
                            render={({ match, history }) => (<BookFullDetailsPage books={this.state.books}
-                                                              bookId={match.params.id}
-                                                              goBack={history.goBack}
+                                                                                 handleBookshelfBookChange={this.handleBookshelfBookChange}
+                                                                                 bookId={match.params.id}
+                                                                                 goBack={history.goBack}
                            />)}
                     />
                     <Route component={PageNotFound}/>

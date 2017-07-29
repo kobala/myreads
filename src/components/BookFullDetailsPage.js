@@ -13,7 +13,7 @@ class BookFullDetailsPage extends Component{
     }
 
     getBook = (bookId) => {
-        let book = this.props.books.find(book => book.id == bookId)
+        let book = this.props.books.find(book => book.id === bookId)
 
         if(book !== undefined){
             this.setState({ book })
@@ -44,10 +44,20 @@ class BookFullDetailsPage extends Component{
                             <h3>{book.title}</h3>
                             <h4>by {book.authors ? book.authors.join(',') : null}</h4>
                             <h5>Categories: {book.categories ? book.categories.map(category => category.toLowerCase().replace(/\b\w/g, l => l.toUpperCase())).join() : 'None'}</h5>
-                            <h5>Page Count: {book.pageCount}</h5>
+                            {book.pageCount &&
+                                <h5>Page Count: {book.pageCount}</h5>
+                            }
                             {book.previewLink &&
                                 <a href={book.previewLink} target="_blank">Preview</a>
                             }
+                            <br/>
+                            <select onChange={(e) => this.props.handleBookshelfBookChange(book, e.target.value)} value={book.shelf}>
+                                <option value="none" disabled>Move to...</option>
+                                <option value="currentlyReading">Currently Reading</option>
+                                <option value="wantToRead">Want to Read</option>
+                                <option value="read">Read</option>
+                                <option value="none">None</option>
+                            </select>
                             <br/>
                             <p> {book.description}</p>
                         </div>
