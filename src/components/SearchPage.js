@@ -11,10 +11,20 @@ class SearchPage extends Component{
         prevPage: ''
     }
 
-    handleSearchQueryUpdate(query) {
+    componentDidMount(){
+        const url = new URL(location)
+        const query = url.searchParams.get('query')
+
+        if(query)
+            this.handleSearchQueryUpdate(query)
+    }
+
+    handleSearchQueryUpdate = query => {
         this.setState({ query, isLoading: true })
 
         let trimmedQuery = query.trim()
+
+        this.updateQueryString(trimmedQuery)
 
         if (trimmedQuery === ''){
             this.setState({ isLoading: false })
@@ -27,6 +37,14 @@ class SearchPage extends Component{
 
             this.setState({ books: filteredBooks, isLoading: false })
         })
+    }
+
+    updateQueryString = query => {
+        const params = new URLSearchParams(location.search)
+
+        params.set('query', query);
+
+        window.history.replaceState({}, '', `${location.pathname}?${params}`)
     }
 
     render(){
