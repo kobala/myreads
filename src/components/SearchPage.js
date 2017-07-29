@@ -5,11 +5,17 @@ import ProgressBar from './common/ProgressBar'
 
 class SearchPage extends Component{
     state = {
+        shelfBooks: [],
         books: [],
         query: '',
         isLoading: false,
         prevPage: ''
     }
+
+    componentWillMount() {
+        BooksAPI.getAll().then(shelfBooks => this.setState({ shelfBooks }))
+    }
+
 
     handleSearchQueryUpdate(query) {
         this.setState({ query, isLoading: true })
@@ -33,21 +39,32 @@ class SearchPage extends Component{
     handleBookshelfBookChange = (book, shelf) => {
         BooksAPI.update(book, shelf)
             .then(() => {
-                let { books } = this.state
+                let { shelfBooks } = this.state
 
-                books.find((b) => b === book ).shelf = shelf
+                shelfBooks = shelfBooks.map((shelfBook) => {
+                    if(shelfBook.id === book.id)
+                        shelfBook.shelf = shelf
 
-                this.setState({ books })
+                    return shelfBook
+                })
 
-                if(shelf !== 'none')
-                    alert(`${book.title} has been added to your list!`)
+                this.setState({ shelfBooks })
             })
-            .catch(() => alert('An error occurred! Please try again!'));
+            .catch(() => alert('An error occurred! Please try again!'))
     }
 
     render(){
         const { books, query, isLoading } = this.state
-        
+
+        books.map(book => {
+            const bookShelfBook = this.state.shelfBooks.find(shelfBook => shelfBook.id === book.id)
+
+            if(bookShelfBook)
+                book.shelf = bookShelfBook.shelf
+
+            return book
+        })
+
         return(
             <div className="search-books">
                 { isLoading && <ProgressBar /> }
