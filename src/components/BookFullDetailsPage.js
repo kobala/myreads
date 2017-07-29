@@ -9,13 +9,19 @@ class BookFullDetailsPage extends Component{
     }
 
     componentDidMount(){
-        this.getBook(this.props.match.params.id)
+        this.getBook(this.props.bookId)
     }
 
     getBook = (bookId) => {
-        BooksAPI.get(bookId).then(book => {
-           this.setState({ book })
-        })
+        let book = this.props.books.find(book => book.id == bookId)
+
+        if(book !== undefined){
+            this.setState({ book })
+        }else{
+            BooksAPI.get(bookId).then(book => {
+                this.setState({ book })
+            })
+        }
     }
 
     render(){
@@ -26,12 +32,9 @@ class BookFullDetailsPage extends Component{
                 <div className="list-books-title">
                     <h1>{book.title || 'loading...'}</h1>
                 </div>
-                <Link
-                    to='/'
-                    className='close-search'
-                >
+                <a href="" onClick={this.props.goBack} className='close-search'>
                     Close
-                </Link>
+                </a>
                 {book.title &&
                     <div className="book-details">
                         <div className="book-cover"

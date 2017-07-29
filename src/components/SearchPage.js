@@ -1,21 +1,16 @@
 import React, { Component } from 'react'
+import { Link } from 'react-router-dom'
 import * as BooksAPI from '../utils/BooksAPI'
 import Bookshelf from './Bookshelf'
 import ProgressBar from './common/ProgressBar'
 
 class SearchPage extends Component{
     state = {
-        shelfBooks: [],
         books: [],
         query: '',
         isLoading: false,
         prevPage: ''
     }
-
-    componentWillMount() {
-        BooksAPI.getAll().then(shelfBooks => this.setState({ shelfBooks }))
-    }
-
 
     handleSearchQueryUpdate(query) {
         this.setState({ query, isLoading: true })
@@ -28,7 +23,6 @@ class SearchPage extends Component{
             return
         }
 
-
         BooksAPI.search(trimmedQuery).then(books => {
             let filteredBooks = Array.isArray(books) ? books : []
 
@@ -36,31 +30,13 @@ class SearchPage extends Component{
         })
     }
 
-    handleBookshelfBookChange = (book, shelf) => {
-        BooksAPI.update(book, shelf)
-            .then(() => {
-                let { shelfBooks } = this.state
-
-                shelfBooks = shelfBooks.map((shelfBook) => {
-                    if(shelfBook.id === book.id)
-                        shelfBook.shelf = shelf
-
-                    return shelfBook
-                })
-
-                this.setState({ shelfBooks })
-            })
-            .catch(() => alert('An error occurred! Please try again!'))
-    }
-
     render(){
         const { books, query, isLoading } = this.state
 
         books.map(book => {
-            const bookShelfBook = this.state.shelfBooks.find(shelfBook => shelfBook.id === book.id)
+            const bookShelfBook = this.props.books.find(shelfBook => shelfBook.id === book.id)
 
-            if(bookShelfBook)
-                book.shelf = bookShelfBook.shelf
+            book.shelf = bookShelfBook !== undefined ? bookShelfBook.shelf : 'none'
 
             return book
         })
@@ -69,10 +45,9 @@ class SearchPage extends Component{
             <div className="search-books">
                 { isLoading && <ProgressBar /> }
                 <div className="search-books-bar">
-                    <a href="" onClick={this.props.history.goBack} className='close-search'>
+                    <a href="" onClick={this.props.goBack} className='close-search'>
                         Close
                     </a>
-
                     <div className="search-books-input-wrapper">
                         <input
                             type="text"
@@ -89,7 +64,7 @@ class SearchPage extends Component{
                                 title="Search Results"
                                 debounceTimeout={400}
                                 books={books}
-                                handleBookshelfBookChange={this.handleBookshelfBookChange}
+                                handleBookshelfBookChange={this.props.handleBookshelfBookChange}
                             /> : ( query !== '' && !isLoading && books.length === 0 ) &&
                             <div>No Search Result</div>
                         }

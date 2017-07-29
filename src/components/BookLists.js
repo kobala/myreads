@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import Bookshelf from './Bookshelf'
-import * as BooksAPI from '../utils/BooksAPI'
 import Select from 'react-select'
 import escapeRegExp from 'escape-string-regexp'
 import 'react-select/dist/react-select.css'
@@ -15,34 +14,17 @@ class BookLists extends Component {
         query: ''
     }
 
-    componentDidMount() {
-        this.getBooks()
-    }
+    componentWillReceiveProps(nextProps) {
+        let categories = Array.from(new Set(nextProps.books.map(book => {
+            if(book.categories)
+                return book.categories.map(category => category.toLowerCase().replace(/\b\w/g, l => l.toUpperCase()))
 
-    getBooks = () => {
-        BooksAPI.getAll().then(books => {
-            let categories = Array.from(new Set(books.map(book => {
-                if(book.categories)
-                    return book.categories.map(category => category.toLowerCase().replace(/\b\w/g, l => l.toUpperCase()))
-
-                return null
-            }).filter(category => category !== null).reduce((prev, curr) => prev.concat(curr)))).map(category => {
-                return {value: category, label: category}
-            })
-
-            this.setState({
-                books,
-                categories
-            })
+            return null
+        }).filter(category => category !== null).reduce((prev, curr) => prev.concat(curr)))).map(category => {
+            return {value: category, label: category}
         })
-    }
 
-    handleBookshelfBookChange = (bookToUpdate, shelf) => {
-        let books = this.state.books.map(book => book === bookToUpdate ? Object.assign(book, { shelf }) : book);
-
-        this.setState({ books })
-
-        BooksAPI.update(bookToUpdate, shelf);
+        this.setState({ categories })
     }
 
     handleQueryUpdate = (query) => {
@@ -66,7 +48,9 @@ class BookLists extends Component {
     }
 
     render() {
-        let { books, categories, selectedCategories, query } = this.state
+        let { books } = this.props
+
+        let { categories, selectedCategories, query } = this.state
 
         if(selectedCategories.length > 0)
             books = books.filter(book => book.categories && book.categories
@@ -114,19 +98,19 @@ class BookLists extends Component {
                         <Bookshelf
                             title="Currently Reading"
                             books={currentlyReading}
-                            handleBookshelfBookChange={this.handleBookshelfBookChange}
+                            handleBookshelfBookChange={this.props.handleBookshelfBookChange}
                         />
 
                         <Bookshelf
                             title="Want To Read"
                             books={wantToRead}
-                            handleBookshelfBookChange={this.handleBookshelfBookChange}
+                            handleBookshelfBookChange={this.props.handleBookshelfBookChange}
                         />
 
                         <Bookshelf
                             title="Read"
                             books={read}
-                            handleBookshelfBookChange={this.handleBookshelfBookChange}
+                            handleBookshelfBookChange={this.props.handleBookshelfBookChange}
                         />
                     </div>
                 </div>
