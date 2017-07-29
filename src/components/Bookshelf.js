@@ -18,7 +18,7 @@ function Bookshelf({ title, books, handleBookshelfBookChange }) {
                     </ol>
                 </div>
             </div>
-        );
+        )
 }
 
 Bookshelf.propTypes = {

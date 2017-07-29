@@ -1,5 +1,5 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React from 'react'
+import { Link } from 'react-router-dom'
 
 const PageNotFound = () =>
     <div className="list-books">
@@ -13,4 +13,4 @@ const PageNotFound = () =>
         </div>
     </div>
 
-export default PageNotFound;
+export default PageNotFound

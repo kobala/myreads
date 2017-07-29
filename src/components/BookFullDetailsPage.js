@@ -1,6 +1,6 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 import * as BooksAPI from '../utils/BooksAPI'
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router-dom'
 import '../styles/BookDetails.css'
 
 class BookFullDetailsPage extends Component{
@@ -75,5 +75,5 @@ class BookFullDetailsPage extends Component{
     }
 }
 
-export default BookFullDetailsPage;
+export default BookFullDetailsPage
 
