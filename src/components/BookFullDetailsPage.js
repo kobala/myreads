@@ -28,7 +28,7 @@ class BookFullDetailsPage extends Component{
         }else{
             BooksAPI.get(bookId).then(book => {
                 this.setState({ book })
-            })
+            }).catch(() => this.setState({ book: null }))
         }
     }
 
@@ -38,12 +38,12 @@ class BookFullDetailsPage extends Component{
         return(
             <div className="list-books">
                 <div className="list-books-title">
-                    <h1>{book.title || 'loading...'}</h1>
+                    <h1>{(book !== null && book.title) || 'loading...'}</h1>
                 </div>
                 <a href="" onClick={this.props.goBack} className='close-search'>
                     Close
                 </a>
-                {book.title &&
+                {book !== null && Object.keys(book).length !== 0 ?
                     <div className="book-details">
                         <div className="book-cover"
                              style={{backgroundImage: `url(${book.imageLinks ? book.imageLinks.thumbnail : null})`}}>
@@ -70,6 +70,11 @@ class BookFullDetailsPage extends Component{
                             <p> {book.description}</p>
                         </div>
                     </div>
+                    : book === null &&
+                        <div>
+                            <h3>404 book not found</h3>
+                            <p>You can also <Link to="/search">search MyReads</Link> or <Link to="/">browse from the homepage </Link> to find the information you need</p>
+                        </div>
                 }
                 <div className="open-search">
                     <Link
