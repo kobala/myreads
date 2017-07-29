@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
+import PropTypes from 'prop-types'
 import Bookshelf from './Bookshelf'
 import Select from 'react-select'
 import escapeRegExp from 'escape-string-regexp'
@@ -7,6 +8,11 @@ import 'react-select/dist/react-select.css'
 
 
 class BookLists extends Component {
+    static propTypes = {
+        books: PropTypes.array.isRequired,
+        handleBookshelfBookChange: PropTypes.func.isRequired
+    }
+
     state = {
         books: [],
         categories: [],

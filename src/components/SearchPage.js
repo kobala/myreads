@@ -1,9 +1,16 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import * as BooksAPI from '../utils/BooksAPI'
 import Bookshelf from './Bookshelf'
 import ProgressBar from './common/ProgressBar'
 
 class SearchPage extends Component{
+    static propTypes = {
+        books: PropTypes.array.isRequired,
+        handleBookshelfBookChange: PropTypes.func.isRequired,
+        goBack: PropTypes.func.isRequired
+    }
+
     state = {
         books: [],
         query: '',

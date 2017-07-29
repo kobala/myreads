@@ -1,9 +1,17 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import * as BooksAPI from '../utils/BooksAPI'
 import { Link } from 'react-router-dom'
 import '../styles/BookDetails.css'
 
 class BookFullDetailsPage extends Component{
+    static propTypes = {
+        books: PropTypes.array.isRequired,
+        handleBookshelfBookChange: PropTypes.func.isRequired,
+        goBack: PropTypes.func.isRequired,
+        bookId: PropTypes.string.isRequired
+    }
+
     state = {
         book: {}
     }
