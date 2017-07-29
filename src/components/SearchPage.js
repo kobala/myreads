@@ -13,10 +13,23 @@ class SearchPage extends Component{
 
     componentDidMount(){
         const url = new URL(location)
+        
         const query = url.searchParams.get('query')
 
         if(query)
             this.handleSearchQueryUpdate(query)
+    }
+
+    goBack = () => {
+        this.props.goBack()
+    }
+
+    updateQueryString = query => {
+        const params = new URLSearchParams(location.search)
+
+        params.set('query', query)
+
+        window.history.replaceState({}, '', `${location.pathname}?${params}`)
     }
 
     handleSearchQueryUpdate = query => {
@@ -39,14 +52,6 @@ class SearchPage extends Component{
         })
     }
 
-    updateQueryString = query => {
-        const params = new URLSearchParams(location.search)
-
-        params.set('query', query);
-
-        window.history.replaceState({}, '', `${location.pathname}?${params}`)
-    }
-
     render(){
         const { books, query, isLoading } = this.state
 
@@ -62,7 +67,7 @@ class SearchPage extends Component{
             <div className="search-books">
                 { isLoading && <ProgressBar /> }
                 <div className="search-books-bar">
-                    <a href="" onClick={this.props.goBack} className='close-search'>
+                    <a href="" onClick={this.goBack} className='close-search'>
                         Close
                     </a>
                     <div className="search-books-input-wrapper">
